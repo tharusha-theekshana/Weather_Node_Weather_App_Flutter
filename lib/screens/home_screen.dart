@@ -7,6 +7,7 @@ import 'package:weather_node/model/weather_data.dart';
 import 'package:weather_node/utils/app_colors.dart';
 import 'package:weather_node/widgets/detail_widget.dart';
 import 'package:weather_node/widgets/location_widget.dart';
+import 'package:weather_node/widgets/search_bar_widget.dart';
 import 'package:weather_node/widgets/weather_image_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late double _deviceWidth, _deviceHeight;
   late final WeatherController weatherController;
   late final ColorController colorController;
-  late Future<WeatherData> weatherData;
 
   final TextEditingController searchController = TextEditingController();
 
@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     weatherController = Get.put(WeatherController());
     colorController = Get.put(ColorController());
-    weatherData = weatherController.getWeather(
+    weatherController.weatherData = weatherController.getWeather(
         widget.position.latitude.toString(),
         widget.position.longitude.toString());
   }
@@ -53,7 +53,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 vertical: _deviceHeight * 0.01,
                 horizontal: _deviceWidth * 0.02),
             child: Column(
-              children: [_weatherData()],
+              children: [
+                SearchBarWidget(
+                  searchController: searchController,
+                  onSubmitted: (value) {
+                    weatherController.weatherData =
+                        controller.getWeatherByCityName(value.toString());
+                  },
+                ),
+                SizedBox(
+                  height: _deviceHeight * 0.05,
+                ),
+                Expanded(child: _weatherData())
+              ],
             ),
           ),
         ),
@@ -63,31 +75,38 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _weatherData() {
     return FutureBuilder<WeatherData>(
-      future: weatherData,
+      future: weatherController.weatherData,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: CircularProgressIndicator(
+              color: snapshot.data.isNull
+                  ? AppColors.whiteColor
+                  : colorController.changeColor(snapshot.data!.mainWeather),
+            ),
           );
         } else if (snapshot.hasError) {
           return Column(
             children: [
-              TextButton(onPressed: () {
-                setState(() {
-                  weatherData = weatherController.getWeather(
-                    widget.position.latitude.toString(),
-                    widget.position.longitude.toString(),
-                  );
-                });
-              }, child: Text("ssss"))
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      weatherController.weatherData =
+                          weatherController.getWeather(
+                        widget.position.latitude.toString(),
+                        widget.position.longitude.toString(),
+                      );
+                    });
+                  },
+                  child: Text("ssss"))
             ],
           );
         } else if (snapshot.hasData) {
           final weather = snapshot.data!;
           return RefreshIndicator(
-            onRefresh:_refreshWeatherData,
+            onRefresh: _refreshWeatherData,
             child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(),
               child: Column(
                 children: [
                   WeatherImageWidget(weatherType: weather.mainWeather),
@@ -105,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       humidity: weather.humidity,
                       windSpeed: weather.windSpeed,
                       visibility: weather.visibility,
-                      color:  colorController.changeColor(weather.mainWeather))
+                      color: colorController.changeColor(weather.mainWeather))
                 ],
               ),
             ),
@@ -125,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _refreshWeatherData() async {
     // Fetch the updated weather data
     setState(() {
-      weatherData = weatherController.getWeather(
+      weatherController.weatherData = weatherController.getWeather(
         widget.position.latitude.toString(),
         widget.position.longitude.toString(),
       );

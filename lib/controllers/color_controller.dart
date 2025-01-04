@@ -4,8 +4,6 @@ import 'package:weather_node/utils/app_colors.dart';
 
 class ColorController extends GetxController{
 
-  Color color = Colors.blue;
-
   Color changeColor(weather) {
     if (weather == "Clear") {
       return AppColors.yellowColor;
