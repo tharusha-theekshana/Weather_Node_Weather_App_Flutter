@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
               }else{
                 Future.delayed(const Duration(seconds: 2), () async {
                   position = await locationController.fetchCurrentLocation();
-                  Get.to(HomeScreen(position: position));
+                  Get.offAll(() => HomeScreen(position: position));
                 });
               }
               return const SizedBox.shrink();
