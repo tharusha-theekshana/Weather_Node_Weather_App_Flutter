@@ -5,7 +5,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class ConnectionController extends GetxController{
 
-  bool isConnected = false;
+  bool isConnected = true;
   late StreamSubscription<InternetConnectionStatus> _connectionListener;
 
   void listenToConnection() {

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:weather_node/controllers/connection_controller.dart';
+import 'package:weather_node/controllers/location_controller.dart';
 import 'package:weather_node/utils/app_colors.dart';
+
+import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,12 +19,15 @@ class _SplashScreenState extends State<SplashScreen> {
   late Position position;
 
   late final ConnectionController connectionController;
+  late final LocationController locationController;
 
   @override
   void initState() {
     super.initState();
     connectionController = Get.put(ConnectionController());
+    locationController = Get.put(LocationController());
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +55,11 @@ class _SplashScreenState extends State<SplashScreen> {
             builder: (controller) {
               if (!controller.isConnected) {
                 Future.microtask(() => _showNoConnectionPopup());
+              }else{
+                Future.delayed(const Duration(seconds: 2), () async {
+                  position = await locationController.fetchCurrentLocation();
+                  Get.to(HomeScreen(position: position));
+                });
               }
               return const SizedBox.shrink();
             },
@@ -80,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
       snackPosition: SnackPosition.TOP,
       backgroundColor: AppColors.redColor,
       margin: const EdgeInsets.all(10),
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 5),
       icon: Container(
           margin: const EdgeInsets.only(right: 20.0, left: 20.0),
           child: const Icon(
