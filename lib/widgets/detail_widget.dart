@@ -21,10 +21,10 @@ class DetailWidget extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            WeatherDataTileWidget(imageUrl: "assets/images/icons/sunrise.png",text: "Sunrise",value: sunrise,color: color,),
-            WeatherDataTileWidget(imageUrl: "assets/images/icons/sunset.png",text: "Sunset",value: sunset,color: color),
-            WeatherDataTileWidget(imageUrl: "assets/images/icons/humidity.png",text: "Humidity",value: humidity,color: color),
-            WeatherDataTileWidget(imageUrl: "assets/images/icons/cloud.png",text: "Wind speed",value: windSpeed,color: color),
+            WeatherDataTileWidget(imageUrl: "assets/images/icons/sunrise.gif",text: "Sunrise",value: sunrise,color: color,),
+            WeatherDataTileWidget(imageUrl: "assets/images/icons/sunset.gif",text: "Sunset",value: sunset,color: color),
+            WeatherDataTileWidget(imageUrl: "assets/images/icons/humidity.gif",text: "Humidity",value: humidity,color: color),
+            WeatherDataTileWidget(imageUrl: "assets/images/icons/wind.gif",text: "Wind speed",value: windSpeed,color: color),
             WeatherDataTileWidget(imageUrl: "assets/images/icons/visibility.png",text: "Visibility",value: visibility,color: color)
           ],
         ),

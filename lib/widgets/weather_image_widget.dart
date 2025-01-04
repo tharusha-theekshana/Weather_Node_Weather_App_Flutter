@@ -13,26 +13,27 @@ class WeatherImageWidget extends StatelessWidget {
     _deviceWidth = MediaQuery.of(context).size.width;
 
     if(weatherType == "Clear"){
-      return _image("assets/images/icons/weather/clear.png");
+      return _image("assets/images/icons/weather/clear.gif");
     }else if(weatherType == "Clouds"){
-      return  _image("assets/images/icons/weather/clouds.png");
+      return  _image("assets/images/icons/weather/clouds.gif");
     }else if(weatherType == "Rain"){
-      return _image("assets/images/icons/weather/rain.png");
+      return _image("assets/images/icons/weather/rain.gif");
     }else if(weatherType == "Fog"){
-      return _image("assets/images/icons/weather/fog.png");
+      return _image("assets/images/icons/weather/fog.gif");
     }else if(weatherType == "Thunderstorm"){
-      return _image("assets/images/icons/weather/thunder.png");
+      return _image("assets/images/icons/weather/thunder.gif");
     }
     else{
-      return _image("assets/images/icons/weather/clear-sky.png");
+      return _image("assets/images/icons/weather/clear-sky.gif");
     }
   }
 
   Widget _image(String url){
     return Image.asset(
       url,
-      height: _deviceHeight * 0.1,
+      height: _deviceHeight * 0.12,
       width: _deviceWidth * 0.45,
+      filterQuality: FilterQuality.high,
     );
   }
 }

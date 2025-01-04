@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: _deviceHeight * 0.05,
+                    height: _deviceHeight * 0.03,
                   ),
                   Expanded(child: _weatherData())
                 ],
