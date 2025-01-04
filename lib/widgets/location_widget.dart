@@ -16,13 +16,14 @@ class LocationWidget extends StatelessWidget {
     return Container(
       width: _deviceWidth,
       height: _deviceHeight * 0.12,
+      margin: EdgeInsets.symmetric(vertical: _deviceHeight * 0.03),
       child: Stack(alignment: Alignment.center, children: [
         Row(
           children: [
             Expanded(
                 flex: 1,
                 child: containerWidget(title: "Longitude", value: lon)),
-            SizedBox(
+            const SizedBox(
               width: 40,
             ),
             Expanded(

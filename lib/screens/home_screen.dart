@@ -54,12 +54,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 horizontal: _deviceWidth * 0.02),
             child: Column(
               children: [
-                SearchBarWidget(
-                  searchController: searchController,
-                  onSubmitted: (value) {
-                    weatherController.weatherData =
-                        controller.getWeatherByCityName(value.toString());
-                  },
+                SizedBox(
+                  width: _deviceWidth,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: _deviceWidth * 0.03),
+                        height: _deviceHeight * 0.06,
+                        child:
+                            Image.asset("assets/images/logo/logo_letter.png"),
+                      ),
+                      Expanded(
+                        child: SearchBarWidget(
+                          searchController: searchController,
+                          onSubmitted: (value) {
+                            weatherController.weatherData = controller
+                                .getWeatherByCityName(value.toString());
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: _deviceHeight * 0.05,
@@ -130,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         } else {
-          return Center(
+          return const Center(
             child: Text(
               "No data available",
               style: TextStyle(color: Colors.white),
@@ -154,60 +170,72 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _cityName(String cityName) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      const Icon(
-        Icons.location_on,
-        color: Colors.white,
-        size: 18,
-      ),
-      SizedBox(
-        width: _deviceWidth * 0.008,
-      ),
-      Text(cityName,
-          style: const TextStyle(
-              fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white70))
-    ]);
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const Icon(
+          Icons.location_on,
+          color: Colors.white,
+          size: 18,
+        ),
+        SizedBox(
+          width: _deviceWidth * 0.008,
+        ),
+        Text(cityName,
+            style: const TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white70))
+      ]),
+    );
   }
 
   Widget _temperatureText(String temp) {
-    return Text(
-      '$temp °C',
-      style: const TextStyle(
-          color: Colors.white70, fontSize: 50, fontWeight: FontWeight.bold),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 1),
+      child: Text(
+        '$temp °C',
+        style: const TextStyle(
+            color: Colors.white70, fontSize: 50, fontWeight: FontWeight.bold),
+      ),
     );
   }
 
   Widget _mainWeatherType(String main) {
-    return Text(
-      main,
-      style: const TextStyle(
-          fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white70),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 2),
+      child: Text(
+        main,
+        style: const TextStyle(
+            fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white70),
+      ),
     );
   }
 
   Widget _tempLevel(String maxTemp, String minTemp) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      const Icon(
-        Icons.arrow_upward,
-        color: Colors.white,
-        size: 20,
-      ),
-      Text(
-        '$maxTemp °c',
-        style: const TextStyle(fontSize: 18, color: Colors.white),
-      ),
-      SizedBox(
-        width: _deviceWidth * 0.05,
-      ),
-      const Icon(
-        Icons.arrow_downward,
-        color: Colors.white,
-        size: 20,
-      ),
-      Text(
-        '$minTemp °c',
-        style: const TextStyle(fontSize: 18, color: Colors.white),
-      )
-    ]);
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const Icon(
+          Icons.arrow_upward,
+          color: Colors.white,
+          size: 20,
+        ),
+        Text(
+          '$maxTemp °c',
+          style: const TextStyle(fontSize: 18, color: Colors.white),
+        ),
+        SizedBox(
+          width: _deviceWidth * 0.05,
+        ),
+        const Icon(
+          Icons.arrow_downward,
+          color: Colors.white,
+          size: 20,
+        ),
+        Text(
+          '$minTemp °c',
+          style: const TextStyle(fontSize: 18, color: Colors.white),
+        )
+      ]),
+    );
   }
 }
