@@ -17,7 +17,8 @@ class SearchBarWidget extends StatelessWidget {
         if (value.isEmpty) {
          _showErrorValidationPopUp();
         } else {
-          onSubmitted(value); // Call the provided callback function if input is not empty
+          onSubmitted(value);
+          searchController.text = "";
         }
       },
       style: const TextStyle(color: Colors.white,fontSize: 13.0),

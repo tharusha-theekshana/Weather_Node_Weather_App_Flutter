@@ -34,7 +34,8 @@ class LocationWidget extends StatelessWidget {
           width: _deviceWidth,
           height: _deviceHeight * 0.3,
           decoration: const BoxDecoration(
-            image: DecorationImage(image: AssetImage("assets/images/icons/earth.png")),
+            image: DecorationImage(
+                image: AssetImage("assets/images/icons/earth.png")),
           ),
         )
       ]),
@@ -53,18 +54,19 @@ class LocationWidget extends StatelessWidget {
               Colors.black54,
             ],
           ),
-          borderRadius: BorderRadius.all(Radius.circular(15.0))),
+          borderRadius: const BorderRadius.all(Radius.circular(15.0))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(title, style: TextStyle(fontSize: 15.0, color: Colors.white)),
+          Text(title,
+              style: const TextStyle(fontSize: 15.0, color: Colors.white)),
           SizedBox(
-            height: _deviceHeight * 0.01,
+            height: _deviceHeight * 0.005,
           ),
           Text(
             value,
-            style:  TextStyle(fontSize: 15.0, color: Colors.white),
+            style: const TextStyle(fontSize: 15.0, color: Colors.white),
           )
         ],
       ),

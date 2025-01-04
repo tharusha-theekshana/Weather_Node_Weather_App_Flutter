@@ -8,6 +8,7 @@ import 'package:weather_node/controllers/weather_controller.dart';
 import 'package:weather_node/model/weather_data.dart';
 import 'package:weather_node/utils/app_colors.dart';
 import 'package:weather_node/widgets/detail_widget.dart';
+import 'package:weather_node/widgets/error_data_widget.dart';
 import 'package:weather_node/widgets/footer_widget.dart';
 import 'package:weather_node/widgets/location_widget.dart';
 import 'package:weather_node/widgets/search_bar_widget.dart';
@@ -65,12 +66,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: _deviceWidth,
                     child: Row(
                       children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: _deviceWidth * 0.03),
-                          height: _deviceHeight * 0.06,
-                          child:
-                              Image.asset("assets/images/logo/logo_letter.png"),
+                        GestureDetector(
+                          onTap: () {
+                            _refreshWeatherData();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: _deviceWidth * 0.03),
+                            height: _deviceHeight * 0.06,
+                            child:
+                                Image.asset("assets/images/logo/logo_letter.png"),
+                          ),
                         ),
                         Expanded(
                           child: SearchBarWidget(
@@ -110,21 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         } else if (snapshot.hasError) {
-          return Column(
-            children: [
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      weatherController.weatherData =
-                          weatherController.getWeather(
-                        widget.position.latitude.toString(),
-                        widget.position.longitude.toString(),
-                      );
-                    });
-                  },
-                  child: Text("ssss"))
-            ],
-          );
+          return ErrorDataWidget();
         } else if (snapshot.hasData) {
           final weather = snapshot.data!;
           return RefreshIndicator(
@@ -170,14 +162,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _refreshWeatherData() async {
-    // Fetch the updated weather data
     setState(() {
       weatherController.weatherData = weatherController.getWeather(
         widget.position.latitude.toString(),
         widget.position.longitude.toString(),
       );
     });
-    // Wait for the data to load (simulate loading time if needed)
     await Future.delayed(const Duration(milliseconds: 500));
   }
 
@@ -186,31 +176,39 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.blackColor,
-        title: const Text('Exit',style: TextStyle(
-          fontSize: 25.0,
-          fontWeight: FontWeight.bold,
-          color: AppColors.whiteColor
-        ),),
-        content: const Text('Are you sure you want to exit from the app ?',style: TextStyle(
-          color: AppColors.whiteColor,
-          fontSize: 14.0
-        ),),
+        title: const Text(
+          'Exit',
+          style: TextStyle(
+              fontSize: 25.0,
+              fontWeight: FontWeight.bold,
+              color: AppColors.whiteColor),
+        ),
+        content: const Text(
+          'Are you sure you want to exit from the app ?',
+          style: TextStyle(color: AppColors.whiteColor, fontSize: 14.0),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('No',style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 13.0,
-            ),),
+            child: const Text(
+              'No',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13.0,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () {
               exit(0);
             },
-            child: const Text('Yes',style: TextStyle(
+            child: const Text(
+              'Yes',
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 13.0,
-            ),),
+              ),
+            ),
           ),
         ],
       ),
@@ -232,7 +230,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Text(cityName,
             style: const TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white70))
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white70))
       ]),
     );
   }
