@@ -46,7 +46,7 @@ class WeatherDataTileWidget extends StatelessWidget {
             ),
             Text(
               text,
-              style:  TextStyle(fontSize: 15.0, color: Colors.white),
+              style:  const TextStyle(fontSize: 14.0, color: Colors.white),
                textAlign: TextAlign.center,
             ),
             SizedBox(
@@ -54,7 +54,7 @@ class WeatherDataTileWidget extends StatelessWidget {
             ),
             Text(
               value,
-              style:  TextStyle(fontSize: 15.0, color: Colors.white),
+              style:  const TextStyle(fontSize: 14.0, color: Colors.white),
             )
           ],
         ),

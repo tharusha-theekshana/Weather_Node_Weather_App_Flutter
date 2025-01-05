@@ -13,6 +13,9 @@ class WeatherData {
   String sunset;
   String humidity;
   String visibility;
+  String rain;
+  String snow;
+  String clouds;
   String windSpeed;
 
   WeatherData(
@@ -28,6 +31,9 @@ class WeatherData {
         required this.sunset,
         required this.humidity,
         required this.visibility,
+        required this.rain,
+        required this.snow,
+        required this.clouds,
         required this.windSpeed});
 
   factory WeatherData.fromJson(Map<String,dynamic> json){
@@ -46,6 +52,9 @@ class WeatherData {
             json['sys']['sunset'] * 1000)),
         humidity: json['main']['humidity'].toString(),
         visibility: json['visibility'].toString(),
+        rain: json['rain']?['1h']?.toString() ?? "0",
+        snow: json['snow']?['1h']?.toString() ?? "0",
+        clouds: json['clouds']?['all']?.toString() ?? "-1",
         windSpeed: json['wind']['speed'].toString());
   }
 }

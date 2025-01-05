@@ -140,6 +140,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       humidity: weather.humidity,
                       windSpeed: weather.windSpeed,
                       visibility: weather.visibility,
+                      rain: weather.rain,
+                      snow: weather.snow,
+                      cloud: weather.clouds,
                       color: colorController.changeColor(weather.mainWeather)),
                   SizedBox(
                     height: _deviceHeight * 0.04,
