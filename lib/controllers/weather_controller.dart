@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:get/get.dart';
@@ -9,33 +10,57 @@ import '../model/weather_data.dart';
 
 class WeatherController extends GetxController{
 
-  late Future<WeatherData> weatherData;
-  bool isLoading = false;
-  bool hasError = false;
+  var isLoading = false.obs;
+  var hasError = false.obs;
+  var weatherData = Rxn<WeatherData>();
 
-  Future<WeatherData> getWeather(String lat, String lon) async {
-    final response = await http.get(Uri.parse(
-        "${EnvConfig.baseUrl}/weather?lat=$lat&lon=$lon&appid=${EnvConfig.apiKey}&units=metric"));
+  Future<void> getWeather(String lat, String lon) async {
+    isLoading(true);
+    hasError(false);
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      return WeatherData.fromJson(data);
-    } else {
-      throw Exception('Failed to load weather data');
+    try {
+      final response = await http.get(Uri.parse(
+          "${EnvConfig.baseUrl}/weather?lat=$lat&lon=$lon&appid=${EnvConfig.apiKey}&units=metric"));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        weatherData.value = WeatherData.fromJson(data);
+      } else {
+        hasError(true);
+        throw Exception('Failed to load weather data');
+      }
+    } catch (e) {
+      hasError(true);
+      rethrow;
+    } finally {
+      isLoading(false);
     }
   }
 
-  Future<WeatherData> getWeatherByCityName(String cityName) async {
-    final response = await http.get(Uri.parse(
-        '${EnvConfig.baseUrl}/weather?q=$cityName&appid=${EnvConfig.apiKey}&units=metric'));
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      return WeatherData.fromJson(data);
-    } else {
-      throw Exception('Failed to load weather data');
+  Future<void> getWeatherByCityName(String cityName) async {
+    isLoading(true);
+    hasError(false);
+
+    try {
+      final response = await http.get(Uri.parse(
+          '${EnvConfig.baseUrl}/weather?q=$cityName&appid=${EnvConfig.apiKey}&units=metric'));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        weatherData.value = WeatherData.fromJson(data);
+      } else {
+        hasError(true);
+        throw Exception('Failed to load weather data');
+      }
+    } catch (e) {
+      hasError(true);
+      rethrow;
+    } finally {
+      isLoading(false);
     }
   }
+
 
   @override
   void onInit() {

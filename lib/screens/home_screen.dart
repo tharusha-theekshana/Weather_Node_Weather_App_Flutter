@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:weather_node/controllers/color_controller.dart';
+import 'package:weather_node/controllers/connection_controller.dart';
 import 'package:weather_node/controllers/weather_controller.dart';
 import 'package:weather_node/model/weather_data.dart';
 import 'package:weather_node/utils/app_colors.dart';
@@ -27,8 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
   late double _deviceWidth, _deviceHeight;
   late final WeatherController weatherController;
   late final ColorController colorController;
+  late final ConnectionController connectionController;
 
   final TextEditingController searchController = TextEditingController();
+  late WeatherData? weatherDataExist;
+
+  Timer? _timer;
 
   @override
   void initState() {
@@ -36,9 +42,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     weatherController = Get.put(WeatherController());
     colorController = Get.put(ColorController());
-    weatherController.weatherData = weatherController.getWeather(
-        widget.position.latitude.toString(),
+    connectionController = Get.put(ConnectionController());
+    weatherController.getWeather(widget.position.latitude.toString(),
         widget.position.longitude.toString());
+
+    _timer = Timer.periodic(Duration(minutes: 5), (timer) {
+      _refreshWeatherData(weatherDataExist!.latitude.toString(),
+          weatherDataExist!.longitude.toString());
+    });
   }
 
   @override
@@ -68,22 +79,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            _refreshWeatherData();
+                            _refreshWeatherData(
+                                widget.position.latitude.toString(),
+                                widget.position.longitude.toString());
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: _deviceWidth * 0.03),
                             height: _deviceHeight * 0.06,
-                            child:
-                                Image.asset("assets/images/logo/logo_letter.png"),
+                            child: Image.asset(
+                                "assets/images/logo/logo_letter.png"),
                           ),
                         ),
                         Expanded(
                           child: SearchBarWidget(
                             searchController: searchController,
                             onSubmitted: (value) {
-                              weatherController.weatherData = controller
-                                  .getWeatherByCityName(value.toString());
+                              controller.getWeatherByCityName(value.toString());
                             },
                           ),
                         ),
@@ -104,73 +116,97 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _weatherData() {
-    return FutureBuilder<WeatherData>(
-      future: weatherController.weatherData,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+    return Obx(
+      () {
+        final weatherData = weatherController.weatherData.value;
+        weatherDataExist = weatherData;
+
+        if (weatherController.isLoading.value) {
           return Center(
             child: CircularProgressIndicator(
-              color: snapshot.data.isNull
+              color: weatherData.isNull
                   ? AppColors.whiteColor
-                  : colorController.changeColor(snapshot.data!.mainWeather),
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return ErrorDataWidget();
-        } else if (snapshot.hasData) {
-          final weather = snapshot.data!;
-          return RefreshIndicator(
-            onRefresh: _refreshWeatherData,
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  WeatherImageWidget(weatherType: weather.mainWeather),
-                  _temperatureText(weather.temperature),
-                  _cityName(weather.cityName),
-                  _mainWeatherType(weather.mainWeather),
-                  _tempLevel(weather.tempMax, weather.tempMin),
-                  LocationWidget(
-                      lon: weather.longitude,
-                      lat: weather.latitude,
-                      color: colorController.changeColor(weather.mainWeather)),
-                  DetailWidget(
-                      sunrise: weather.sunrise,
-                      sunset: weather.sunset,
-                      humidity: weather.humidity,
-                      windSpeed: weather.windSpeed,
-                      visibility: weather.visibility,
-                      rain: weather.rain,
-                      snow: weather.snow,
-                      cloud: weather.clouds,
-                      color: colorController.changeColor(weather.mainWeather)),
-                  SizedBox(
-                    height: _deviceHeight * 0.04,
-                  ),
-                  FooterWidget()
-                ],
-              ),
-            ),
-          );
-        } else {
-          return const Center(
-            child: Text(
-              "No data available",
-              style: TextStyle(color: Colors.white),
+                  : colorController.changeColor(weatherData!.mainWeather),
             ),
           );
         }
+
+        if (weatherController.hasError.value) {
+          return connectionController.isConnected
+              ? ErrorDataWidget(
+                  titleText: "No Data Found ... !",
+                  subText: "Please search valid city name..",
+                  icon: const Icon(
+                    Icons.info_outline,
+                    color: AppColors.whiteColor,
+                    size: 35.0,
+                  ),
+                )
+              : ErrorDataWidget(
+                  titleText: "No Internet Connection",
+                  subText: "",
+                  icon: const Icon(
+                    Icons.signal_wifi_connected_no_internet_4,
+                    color: AppColors.whiteColor,
+                    size: 35.0,
+                  ),
+                );
+        }
+
+        if (weatherData == null) {
+          return ErrorDataWidget(
+            titleText: "No Data Found ... !",
+            subText: "Please search valid city name..",
+            icon: const Icon(
+              Icons.info_outline,
+              color: AppColors.whiteColor,
+              size: 35.0,
+            ),
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: () =>
+              _refreshWeatherData(weatherData.latitude, weatherData.longitude),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                WeatherImageWidget(weatherType: weatherData.mainWeather),
+                _temperatureText(weatherData.temperature),
+                _cityName(weatherData.cityName),
+                _mainWeatherType(weatherData.mainWeather),
+                _tempLevel(weatherData.tempMax, weatherData.tempMin),
+                LocationWidget(
+                    lon: weatherData.longitude,
+                    lat: weatherData.latitude,
+                    color:
+                        colorController.changeColor(weatherData.mainWeather)),
+                DetailWidget(
+                    sunrise: weatherData.sunrise,
+                    sunset: weatherData.sunset,
+                    humidity: weatherData.humidity,
+                    windSpeed: weatherData.windSpeed,
+                    visibility: weatherData.visibility,
+                    rain: weatherData.rain,
+                    snow: weatherData.snow,
+                    cloud: weatherData.clouds,
+                    color:
+                        colorController.changeColor(weatherData.mainWeather)),
+                SizedBox(
+                  height: _deviceHeight * 0.04,
+                ),
+                FooterWidget()
+              ],
+            ),
+          ),
+        );
       },
     );
   }
 
-  Future<void> _refreshWeatherData() async {
-    setState(() {
-      weatherController.weatherData = weatherController.getWeather(
-        widget.position.latitude.toString(),
-        widget.position.longitude.toString(),
-      );
-    });
+  Future<void> _refreshWeatherData(String lat, String lon) async {
+    weatherController.getWeather(lat, lon);
     await Future.delayed(const Duration(milliseconds: 500));
   }
 
