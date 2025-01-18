@@ -13,8 +13,9 @@ import 'package:weather_node/widgets/detail_widget.dart';
 import 'package:weather_node/widgets/error_data_widget.dart';
 import 'package:weather_node/widgets/footer_widget.dart';
 import 'package:weather_node/widgets/location_widget.dart';
-import 'package:weather_node/widgets/search_bar_widget.dart';
 import 'package:weather_node/widgets/weather_image_widget.dart';
+
+import '../widgets/custom_app_bar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   final Position position;
@@ -61,54 +62,29 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: () async {
         return await _showExitConfirmation();
       },
-      child: SafeArea(
-        child: GetBuilder<WeatherController>(
-          init: WeatherController(),
-          builder: (controller) => Scaffold(
-            backgroundColor: AppColors.blackColor,
-            body: Container(
-              height: _deviceHeight,
-              padding: EdgeInsets.symmetric(
-                  vertical: _deviceHeight * 0.01,
-                  horizontal: _deviceWidth * 0.02),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: _deviceWidth,
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            _refreshWeatherData(
-                                widget.position.latitude.toString(),
-                                widget.position.longitude.toString());
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: _deviceWidth * 0.03),
-                            height: _deviceHeight * 0.06,
-                            child: Image.asset(
-                                "assets/images/logo/logo_letter.png"),
-                          ),
-                        ),
-                        Expanded(
-                          child: SearchBarWidget(
-                            searchController: searchController,
-                            onSubmitted: (value) {
-                              controller.getWeatherByCityName(value.toString());
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: _deviceHeight * 0.03,
-                  ),
-                  Expanded(child: _weatherData())
-                ],
-              ),
-            ),
+      child: GetBuilder<WeatherController>(
+        init: WeatherController(),
+        builder: (controller) => Scaffold(
+          appBar: CustomAppBar(
+            deviceWidth: _deviceWidth,
+            deviceHeight: _deviceHeight,
+            searchController: searchController,
+            onLogoTap: () {
+              _refreshWeatherData(
+                  widget.position.latitude.toString(),
+                  widget.position.longitude.toString());
+            },
+            onSearchSubmitted: (value) {
+              controller.getWeatherByCityName(value.toString());
+            },
+          ),
+          backgroundColor: AppColors.blackColor,
+          body: Container(
+            height: _deviceHeight * 0.98,
+            padding: EdgeInsets.symmetric(
+                vertical: _deviceHeight * 0.01,
+                horizontal: _deviceWidth * 0.02),
+            child: _weatherData(),
           ),
         ),
       ),
