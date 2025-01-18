@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_node/widgets/search_bar_widget.dart';
-
-import '../utils/app_colors.dart';
+import 'package:weather_node/widgets/theme_icon_widget.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double deviceWidth;
@@ -22,7 +21,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.blackColor,
       elevation: 0,
       titleSpacing: 0,
       leading: Padding(
@@ -45,6 +43,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           onSubmitted: onSearchSubmitted,
         ),
       ),
+      actions: [
+        ThemeIconWidget()
+      ],
       centerTitle: false,
     );
   }

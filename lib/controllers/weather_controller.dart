@@ -14,6 +14,7 @@ class WeatherController extends GetxController{
   var hasError = false.obs;
   var weatherData = Rxn<WeatherData>();
 
+  // Get weather by latitude and longitude
   Future<void> getWeather(String lat, String lon) async {
     isLoading(true);
     hasError(false);
@@ -37,7 +38,7 @@ class WeatherController extends GetxController{
     }
   }
 
-
+  // Get weather by city name
   Future<void> getWeatherByCityName(String cityName) async {
     isLoading(true);
     hasError(false);

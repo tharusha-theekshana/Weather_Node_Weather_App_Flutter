@@ -35,7 +35,6 @@ class _SplashScreenState extends State<SplashScreen> {
     _deviceWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: AppColors.blackColor,
       body: Stack(
         children: [
           Center(

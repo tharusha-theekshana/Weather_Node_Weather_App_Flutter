@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:weather_node/controllers/connection_controller.dart';
 import 'package:weather_node/controllers/location_controller.dart';
 import 'package:weather_node/controllers/weather_controller.dart';
-import 'package:weather_node/utils/app_colors.dart';
 
 import '../screens/home_screen.dart';
 
@@ -38,6 +36,7 @@ class ErrorDataWidget extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         child: Container(
           height: _deviceHeight * 0.8,
+          width: _deviceWidth,
           padding: EdgeInsets.symmetric(horizontal: _deviceWidth * 0.05),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -51,7 +50,6 @@ class ErrorDataWidget extends StatelessWidget {
                 titleText,
                 style: const TextStyle(
                     fontSize: 18.0,
-                    color: AppColors.whiteColor,
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(
@@ -60,7 +58,7 @@ class ErrorDataWidget extends StatelessWidget {
               Text(
                 // "Please check your internet connection or search value is valid or not.",
                 subText,
-                style: TextStyle(fontSize: 12.0, color: AppColors.whiteColor),
+                style: const TextStyle(fontSize: 12.0),
                 textAlign: TextAlign.center,
               )
             ],

@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     weatherController.getWeather(widget.position.latitude.toString(),
         widget.position.longitude.toString());
 
-    _timer = Timer.periodic(Duration(minutes: 5), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 5), (timer) {
       _refreshWeatherData(weatherDataExist!.latitude.toString(),
           weatherDataExist!.longitude.toString());
     });
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
               controller.getWeatherByCityName(value.toString());
             },
           ),
-          backgroundColor: AppColors.blackColor,
+
           body: Container(
             height: _deviceHeight * 0.98,
             padding: EdgeInsets.symmetric(
@@ -114,7 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   subText: "Please search valid city name..",
                   icon: const Icon(
                     Icons.info_outline,
-                    color: AppColors.whiteColor,
                     size: 35.0,
                   ),
                 )
@@ -123,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   subText: "",
                   icon: const Icon(
                     Icons.signal_wifi_connected_no_internet_4,
-                    color: AppColors.whiteColor,
                     size: 35.0,
                   ),
                 );
@@ -200,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         content: const Text(
           'Are you sure you want to exit from the app ?',
-          style: TextStyle(color: AppColors.whiteColor, fontSize: 14.0),
+          style: TextStyle(fontSize: 14.0),
         ),
         actions: [
           TextButton(
@@ -237,7 +235,6 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Icon(
           Icons.location_on,
-          color: Colors.white,
           size: 18,
         ),
         SizedBox(
@@ -246,8 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Text(cityName,
             style: const TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white70))
+                fontWeight: FontWeight.bold))
       ]),
     );
   }
@@ -258,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Text(
         '$temp °C',
         style: const TextStyle(
-            color: Colors.white70, fontSize: 50, fontWeight: FontWeight.bold),
+            fontSize: 50, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -269,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Text(
         main,
         style: const TextStyle(
-            fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white70),
+            fontSize: 17, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -280,24 +276,22 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Icon(
           Icons.arrow_upward,
-          color: Colors.white,
           size: 20,
         ),
         Text(
           '$maxTemp °c',
-          style: const TextStyle(fontSize: 18, color: Colors.white),
+          style: const TextStyle(fontSize: 18),
         ),
         SizedBox(
           width: _deviceWidth * 0.05,
         ),
         const Icon(
           Icons.arrow_downward,
-          color: Colors.white,
           size: 20,
         ),
         Text(
           '$minTemp °c',
-          style: const TextStyle(fontSize: 18, color: Colors.white),
+          style: const TextStyle(fontSize: 18),
         )
       ]),
     );

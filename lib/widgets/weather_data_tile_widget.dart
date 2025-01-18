@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/app_colors.dart';
+
 
 class WeatherDataTileWidget extends StatelessWidget {
   final String imageUrl, text, value;
@@ -25,13 +27,13 @@ class WeatherDataTileWidget extends StatelessWidget {
       height: _deviceHeight * 0.25,
       margin: EdgeInsets.symmetric(horizontal: _deviceWidth * 0.01),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomCenter,
             colors: [
               color,
-              Colors.black54,
+              AppColors.grayColor
             ],
           )),
       child: Padding(
@@ -46,7 +48,7 @@ class WeatherDataTileWidget extends StatelessWidget {
             ),
             Text(
               text,
-              style:  const TextStyle(fontSize: 14.0, color: Colors.white),
+              style:  const TextStyle(fontSize: 14.0,fontWeight: FontWeight.w600),
                textAlign: TextAlign.center,
             ),
             SizedBox(
@@ -54,7 +56,7 @@ class WeatherDataTileWidget extends StatelessWidget {
             ),
             Text(
               value,
-              style:  const TextStyle(fontSize: 14.0, color: Colors.white),
+              style:  const TextStyle(fontSize: 14.0,fontWeight: FontWeight.w700),
             )
           ],
         ),

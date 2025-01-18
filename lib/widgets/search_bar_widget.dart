@@ -25,7 +25,6 @@ class SearchBarWidget extends StatelessWidget {
       decoration: const InputDecoration(
         suffixIcon: Icon(
           Icons.search,
-          color: Colors.white60,
         ),
         filled: true,
         fillColor: Colors.black26,
@@ -34,12 +33,11 @@ class SearchBarWidget extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             width: 0.5,
-            color: AppColors.whiteColor,
           ),
           borderRadius: BorderRadius.all(Radius.circular(30)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white38),
+          borderSide: BorderSide(color:AppColors.grayColor),
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
       ),
@@ -51,17 +49,17 @@ class SearchBarWidget extends StatelessWidget {
       "",
       "",
       titleText: Container(
-        margin: EdgeInsets.only(left: 20.0),
+        margin: const EdgeInsets.only(left: 20.0),
         child: const Text(
-          "Enter search value",
+          "Enter city name",
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16.0),
+              fontWeight: FontWeight.bold, color: AppColors.whiteColor, fontSize: 16.0),
         ),
       ),
       messageText: Container(
         margin: const EdgeInsets.only(left: 20.0),
         child: const Text(
-          "Search text can not be empty.",
+          "City name can not be empty.",
           style: TextStyle(color: AppColors.whiteColor, fontSize: 12.0),
         ),
       ),

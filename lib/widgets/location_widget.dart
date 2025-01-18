@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/app_colors.dart';
+
 class LocationWidget extends StatelessWidget {
   late double _deviceWidth, _deviceHeight;
   final String lon, lat;
@@ -49,10 +51,7 @@ class LocationWidget extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              color,
-              Colors.black54,
-            ],
+            colors: [color, AppColors.grayColor],
           ),
           borderRadius: const BorderRadius.all(Radius.circular(15.0))),
       child: Column(
@@ -60,13 +59,14 @@ class LocationWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(title,
-              style: const TextStyle(fontSize: 15.0, color: Colors.white)),
+              style:
+                  const TextStyle(fontSize: 15.0, fontWeight: FontWeight.w600)),
           SizedBox(
             height: _deviceHeight * 0.005,
           ),
           Text(
             value,
-            style: const TextStyle(fontSize: 15.0, color: Colors.white),
+            style: const TextStyle(fontSize: 15.0),
           )
         ],
       ),
